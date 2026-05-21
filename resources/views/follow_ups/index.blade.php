@@ -105,15 +105,15 @@
                         <td class="text-end">
                             <div class="d-flex gap-1 justify-content-end flex-wrap">
                                 @if($followUp->isPending())
-                                <form method="POST" action="{{ route('follow-ups.complete', $followUp) }}" class="d-inline">@csrf<button type="submit" class="btn btn-sm btn-outline-success">Complete</button></form>
+                                <form method="POST" action="{{ route('follow-ups.complete', $followUp) }}" class="d-inline">@csrf<button type="submit" class="btn btn-sm btn-outline-success"><i class="bi bi-check me-1"></i>Complete</button></form>
                                 @elseif(auth()->user()->isAdmin())
-                                <form method="POST" action="{{ route('follow-ups.reopen', $followUp) }}" class="d-inline">@csrf<button type="submit" class="btn btn-sm btn-outline-warning">Reopen</button></form>
+                                <form method="POST" action="{{ route('follow-ups.reopen', $followUp) }}" class="d-inline">@csrf<button type="submit" class="btn btn-sm btn-outline-warning"><i class="bi bi-arrow-counterclockwise me-1"></i>Reopen</button></form>
                                 @endif
-                                <a href="{{ route('follow-ups.edit', $followUp) }}" class="btn btn-sm btn-outline-primary"><i class="bi bi-pencil"></i></a>
+                                <a href="{{ route('follow-ups.edit', $followUp) }}" class="btn btn-sm btn-outline-primary"><i class="bi bi-pencil me-1"></i>Edit</a>
                                 <form action="{{ route('follow-ups.destroy', $followUp) }}" method="POST" class="d-inline" onsubmit="return confirm('Are you sure? This action cannot be undone.');">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></button>
+                                    <button type="submit" class="btn btn-sm btn-outline-danger"><i class="bi bi-trash me-1"></i>Delete</button>
                                 </form>
                             </div>
                         </td>

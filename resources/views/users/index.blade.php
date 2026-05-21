@@ -61,12 +61,12 @@
                         <td>{{ $user->created_at->format('M d, Y') }}</td>
                         <td class="text-end">
                             <div class="btn-group btn-group-sm" role="group">
-                                <a href="{{ route('users.edit', $user) }}" class="btn btn-outline-secondary" title="Edit"><i class="bi bi-pencil"></i></a>
+                                <a href="{{ route('users.edit', $user) }}" class="btn btn-outline-secondary" title="Edit"><i class="bi bi-pencil me-1"></i>Edit</a>
                                 @if($user->id !== auth()->id())
                                 <form action="{{ route('users.destroy', $user) }}" method="POST" class="d-inline" onsubmit="return confirm('Are you sure? This action cannot be undone.');">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="btn btn-outline-danger" title="Delete"><i class="bi bi-trash"></i></button>
+                                    <button type="submit" class="btn btn-outline-danger" title="Delete"><i class="bi bi-trash me-1"></i>Delete</button>
                                 </form>
                                 @endif
                             </div>

@@ -69,11 +69,11 @@
                 <div class="d-flex justify-content-between align-items-center mt-2">
                     <small class="text-muted">{{ $activity->activity_date->format('M d, Y') }}</small>
                     <div class="btn-group btn-group-sm" role="group">
-                        <a href="{{ route('activities.edit', $activity) }}" class="btn btn-outline-secondary" title="Edit"><i class="bi bi-pencil"></i></a>
+                        <a href="{{ route('activities.edit', $activity) }}" class="btn btn-outline-secondary" title="Edit"><i class="bi bi-pencil me-1"></i>Edit</a>
                         <form action="{{ route('activities.destroy', $activity) }}" method="POST" style="display:inline;" onsubmit="return confirm('Are you sure? This action cannot be undone.');">
                             @csrf
                             @method('DELETE')
-                            <button type="submit" class="btn btn-outline-danger" title="Delete"><i class="bi bi-trash"></i></button>
+                            <button type="submit" class="btn btn-outline-danger" title="Delete"><i class="bi bi-trash me-1"></i>Delete</button>
                         </form>
                     </div>
                 </div>
