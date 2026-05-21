@@ -8,7 +8,7 @@ class UpdateFollowUpRequest extends FormRequest
 {
     public function authorize(): bool
     {
-        return true;
+        return auth()->user()->isAdmin() || auth()->user()->isManager() || auth()->user()->isSales();
     }
 
     public function rules(): array

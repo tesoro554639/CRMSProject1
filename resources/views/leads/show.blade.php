@@ -18,21 +18,25 @@
                     <span class="status-badge priority-{{ $lead->priority }}">{{ ucfirst($lead->priority) }}</span>
                 </div>
                 <div class="d-flex gap-2 flex-wrap">
-                    @if($lead->status == 'won' && $lead->canBeConverted())
+                    @if($lead->status == 'won' && $lead->canBeConverted() && auth()->user()->isAdmin())
                     <form method="POST" action="{{ route('leads.convert', $lead) }}" class="d-inline">@csrf<button type="submit" class="btn btn-sm btn-success">Convert to Customer</button></form>
                     @endif
                     @if($lead->status == 'lost' && auth()->user()->isAdmin())
                     <form method="POST" action="{{ route('leads.reopen', $lead) }}" class="d-inline">@csrf<button type="submit" class="btn btn-sm btn-warning">Reopen Lead</button></form>
                     @endif
-                    @if($lead->status != 'lost' && $lead->status != 'won')
+                    @if($lead->status != 'lost' && $lead->status != 'won' && auth()->user()->hasRole(['admin', 'sales']))
                     <a href="{{ route('leads.lost-form', $lead) }}" class="btn btn-sm btn-outline-danger">Mark as Lost</a>
                     @endif
+                    @if(auth()->user()->hasRole(['admin', 'sales']))
                     <a href="{{ route('leads.edit', $lead) }}" class="btn btn-sm btn-outline-primary">Edit</a>
+                    @endif
+                    @if(auth()->user()->isAdmin())
                     <form method="POST" action="{{ route('leads.destroy', $lead) }}" class="d-inline" onsubmit="return confirm('Are you sure? This action cannot be undone.');">
                         @csrf
                         @method('DELETE')
                         <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
                     </form>
+                    @endif
                 </div>
             </div>
             <div class="card-body">
@@ -93,11 +97,13 @@
             <div class="card-body">
                 <a href="{{ route('activities.create') }}?lead_id={{ $lead->id }}" class="btn btn-outline-primary w-100 mb-2">Log Activity</a>
                 <a href="{{ route('follow-ups.create') }}?lead_id={{ $lead->id }}" class="btn btn-outline-primary w-100">Create Follow-up</a>
+                @if(auth()->user()->isAdmin())
                 <hr>
                 <form method="POST" action="{{ route('leads.destroy', $lead) }}">
                     @csrf @method('DELETE')
                     <button type="submit" class="btn btn-outline-danger w-100" onclick="return confirm('Are you sure?')">Delete Lead</button>
                 </form>
+                @endif
             </div>
         </div>
     </div>

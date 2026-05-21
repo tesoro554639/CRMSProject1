@@ -70,7 +70,12 @@ class CustomerController extends Controller
     public function store(StoreCustomerRequest $request)
     {
         $data = $request->validated();
-        $data['assignment_status'] = 'pending';
+
+        if (auth()->user()->isSales()) {
+            $data['assigned_user_id'] = auth()->id();
+            $data['assignment_status'] = 'pending';
+        }
+
         Customer::create($data);
 
         return redirect()->route('customers.index')
@@ -86,6 +91,11 @@ class CustomerController extends Controller
 
     public function edit(Customer $customer): View
     {
+        if (auth()->user()->isSales() && $customer->assigned_user_id !== auth()->id()) {
+            return redirect()->route('customers.index')
+                ->with('error', 'You do not have permission to edit this customer.');
+        }
+
         $salesUsers = User::where('role', 'sales')->get();
 
         return view('customers.edit', compact('customer', 'salesUsers'));
@@ -93,6 +103,11 @@ class CustomerController extends Controller
 
     public function update(UpdateCustomerRequest $request, Customer $customer)
     {
+        if (auth()->user()->isSales() && $customer->assigned_user_id !== auth()->id()) {
+            return redirect()->route('customers.show', $customer)
+                ->with('error', 'You do not have permission to update this customer.');
+        }
+
         $customer->update($request->validated());
 
         return redirect()->route('customers.show', $customer)
@@ -101,6 +116,11 @@ class CustomerController extends Controller
 
     public function destroy(Customer $customer)
     {
+        if (! auth()->user()->isAdmin()) {
+            return redirect()->route('customers.index')
+                ->with('error', 'Only admins can delete customers.');
+        }
+
         $customer->delete();
 
         return redirect()->route('customers.index')
@@ -109,6 +129,11 @@ class CustomerController extends Controller
 
     public function approve(Customer $customer)
     {
+        if (! auth()->user()->isManager() && ! auth()->user()->isAdmin()) {
+            return redirect()->back()
+                ->with('error', 'Only managers and admins can approve customer assignments.');
+        }
+
         $customer->update([
             'assignment_status' => 'approved',
             'assignment_reviewed_by' => auth()->id(),
@@ -121,6 +146,11 @@ class CustomerController extends Controller
 
     public function reject(Customer $customer)
     {
+        if (! auth()->user()->isManager() && ! auth()->user()->isAdmin()) {
+            return redirect()->back()
+                ->with('error', 'Only managers and admins can reject customer assignments.');
+        }
+
         $customer->update([
             'assignment_status' => 'rejected',
             'assignment_reviewed_by' => auth()->id(),

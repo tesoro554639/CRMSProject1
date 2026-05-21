@@ -73,7 +73,13 @@ class LeadController extends Controller
 
     public function store(StoreLeadRequest $request)
     {
-        $lead = Lead::create($request->validated());
+        $data = $request->validated();
+
+        if (auth()->user()->isSales()) {
+            $data['assigned_user_id'] = auth()->id();
+        }
+
+        Lead::create($data);
 
         return redirect()->route('leads.index')
             ->with('success', 'Lead created successfully.');
@@ -88,6 +94,11 @@ class LeadController extends Controller
 
     public function edit(Lead $lead): View
     {
+        if (auth()->user()->isSales() && $lead->assigned_user_id !== auth()->id()) {
+            return redirect()->route('leads.index')
+                ->with('error', 'You do not have permission to edit this lead.');
+        }
+
         $salesUsers = User::where('role', 'sales')->get();
 
         return view('leads.edit', compact('lead', 'salesUsers'));
@@ -95,6 +106,11 @@ class LeadController extends Controller
 
     public function update(UpdateLeadRequest $request, Lead $lead)
     {
+        if (auth()->user()->isSales() && $lead->assigned_user_id !== auth()->id()) {
+            return redirect()->route('leads.show', $lead)
+                ->with('error', 'You do not have permission to update this lead.');
+        }
+
         $lead->update($request->validated());
 
         return redirect()->route('leads.show', $lead)
@@ -103,6 +119,11 @@ class LeadController extends Controller
 
     public function destroy(Lead $lead)
     {
+        if (! auth()->user()->isAdmin()) {
+            return redirect()->route('leads.index')
+                ->with('error', 'Only admins can delete leads.');
+        }
+
         $lead->delete();
 
         return redirect()->route('leads.index')
@@ -140,6 +161,11 @@ class LeadController extends Controller
 
     public function convertToCustomer(Lead $lead)
     {
+        if (! auth()->user()->isAdmin()) {
+            return redirect()->back()
+                ->with('error', 'Only admins can convert leads to customers.');
+        }
+
         if (! $lead->canBeConverted()) {
             return redirect()->back()
                 ->with('error', 'This lead cannot be converted.');

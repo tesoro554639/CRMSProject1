@@ -62,6 +62,11 @@ class ActivityController extends Controller
 
     public function edit(Activity $activity): View
     {
+        if (auth()->user()->isSales() && $activity->user_id !== auth()->id()) {
+            return redirect()->route('activities.index')
+                ->with('error', 'You do not have permission to edit this activity.');
+        }
+
         $customers = Customer::all();
         $leads = Lead::all();
         $users = User::where('role', 'sales')->get();
@@ -71,6 +76,11 @@ class ActivityController extends Controller
 
     public function update(StoreActivityRequest $request, Activity $activity)
     {
+        if (auth()->user()->isSales() && $activity->user_id !== auth()->id()) {
+            return redirect()->route('activities.index')
+                ->with('error', 'You do not have permission to update this activity.');
+        }
+
         $activity->update($request->validated());
 
         return redirect()->route('activities.index')
@@ -79,6 +89,11 @@ class ActivityController extends Controller
 
     public function destroy(Activity $activity)
     {
+        if (auth()->user()->isSales() && $activity->user_id !== auth()->id()) {
+            return redirect()->route('activities.index')
+                ->with('error', 'You do not have permission to delete this activity.');
+        }
+
         $activity->delete();
 
         return redirect()->route('activities.index')

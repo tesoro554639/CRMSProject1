@@ -56,9 +56,9 @@
 
 <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
     <div><small class="text-muted">Viewing all customer records</small></div>
-    @can('create', \App\Models\Customer::class)
+    @if(auth()->user()->hasRole(['admin', 'sales']))
     <a href="{{ route('customers.create') }}" class="btn btn-primary"><i class="bi bi-plus me-1"></i> Add Customer</a>
-    @endcan
+    @endif
 </div>
 
 <div class="card mb-4">
@@ -131,12 +131,14 @@
                         <td class="text-end">
                             <div class="btn-group btn-group-sm" role="group">
                                 <a href="{{ route('customers.show', $customer) }}" class="btn btn-outline-primary" title="View"><i class="bi bi-eye me-1"></i>View</a>
+                                @if(auth()->user()->isAdmin())
                                 <a href="{{ route('customers.edit', $customer) }}" class="btn btn-outline-secondary" title="Edit"><i class="bi bi-pencil me-1"></i>Edit</a>
                                 <form action="{{ route('customers.destroy', $customer) }}" method="POST" style="display:inline;" onsubmit="return confirm('Are you sure? This action cannot be undone.');">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="btn btn-outline-danger" title="Delete"><i class="bi bi-trash me-1"></i>Delete</button>
                                 </form>
+                                @endif
                             </div>
                         </td>
                     </tr>

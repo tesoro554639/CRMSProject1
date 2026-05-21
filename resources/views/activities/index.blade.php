@@ -12,7 +12,9 @@
         <h5 class="mb-0">Team Timeline</h5>
         <small class="text-muted">{{ $totalActivities }} total activities recorded</small>
     </div>
+    @if(auth()->user()->hasRole(['admin', 'sales']))
     <a href="{{ route('activities.create') }}" class="btn btn-primary"><i class="bi bi-plus me-1"></i> Log Activity</a>
+    @endif
 </div>
 
 <div class="card mb-4">
@@ -68,6 +70,7 @@
                 <p class="mb-0 mt-1 text-dark">{{ $activity->description }}</p>
                 <div class="d-flex justify-content-between align-items-center mt-2">
                     <small class="text-muted">{{ $activity->activity_date->format('M d, Y') }}</small>
+                    @if(auth()->user()->hasRole(['admin', 'sales']))
                     <div class="btn-group btn-group-sm" role="group">
                         <a href="{{ route('activities.edit', $activity) }}" class="btn btn-outline-secondary" title="Edit"><i class="bi bi-pencil me-1"></i>Edit</a>
                         <form action="{{ route('activities.destroy', $activity) }}" method="POST" style="display:inline;" onsubmit="return confirm('Are you sure? This action cannot be undone.');">
@@ -76,6 +79,7 @@
                             <button type="submit" class="btn btn-outline-danger" title="Delete"><i class="bi bi-trash me-1"></i>Delete</button>
                         </form>
                     </div>
+                    @endif
                 </div>
             </div>
         </div>

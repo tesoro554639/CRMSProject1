@@ -8,7 +8,15 @@ class UpdateCustomerRequest extends FormRequest
 {
     public function authorize(): bool
     {
-        return true;
+        // Sales staff can only update their own assigned customers
+        if (auth()->user()->isSales()) {
+            $customer = $this->route('customer');
+
+            return $customer && $customer->assigned_user_id === auth()->id();
+        }
+
+        // Admin and manager can update any customer
+        return auth()->user()->isAdmin() || auth()->user()->isManager();
     }
 
     public function rules(): array

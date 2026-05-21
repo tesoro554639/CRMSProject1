@@ -115,6 +115,11 @@ class FollowUpController extends Controller
 
     public function destroy(FollowUp $followUp)
     {
+        if (auth()->user()->isSales() && $followUp->user_id !== auth()->id()) {
+            return redirect()->route('follow-ups.index')
+                ->with('error', 'You do not have permission to delete this follow-up.');
+        }
+
         $followUp->delete();
 
         return redirect()->route('follow-ups.index')

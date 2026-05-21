@@ -8,7 +8,15 @@ class UpdateLeadRequest extends FormRequest
 {
     public function authorize(): bool
     {
-        return true;
+        // Sales staff can only update their own assigned leads
+        if (auth()->user()->isSales()) {
+            $lead = $this->route('lead');
+
+            return $lead && $lead->assigned_user_id === auth()->id();
+        }
+
+        // Only admin can update leads
+        return auth()->user()->isAdmin();
     }
 
     public function rules(): array

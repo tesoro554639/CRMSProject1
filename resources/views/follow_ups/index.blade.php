@@ -45,7 +45,9 @@
 
 <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-4">
     <h5 class="mb-0">Task Tracking</h5>
+    @if(auth()->user()->hasRole(['admin', 'sales']))
     <a href="{{ route('follow-ups.create') }}" class="btn btn-primary"><i class="bi bi-plus me-1"></i> Add Follow-up</a>
+    @endif
 </div>
 
 <div class="card mb-4">
@@ -104,17 +106,21 @@
                         <td>{{ $followUp->user->name }}</td>
                         <td class="text-end">
                             <div class="d-flex gap-1 justify-content-end flex-wrap">
-                                @if($followUp->isPending())
+                                @if($followUp->isPending() && auth()->user()->hasRole(['admin', 'sales']))
                                 <form method="POST" action="{{ route('follow-ups.complete', $followUp) }}" class="d-inline">@csrf<button type="submit" class="btn btn-sm btn-outline-success"><i class="bi bi-check me-1"></i>Complete</button></form>
-                                @elseif(auth()->user()->isAdmin())
+                                @elseif($followUp->isCompleted() && auth()->user()->isAdmin())
                                 <form method="POST" action="{{ route('follow-ups.reopen', $followUp) }}" class="d-inline">@csrf<button type="submit" class="btn btn-sm btn-outline-warning"><i class="bi bi-arrow-counterclockwise me-1"></i>Reopen</button></form>
                                 @endif
+                                @if(auth()->user()->hasRole(['admin', 'sales']) && (!$followUp->isCompleted() || auth()->user()->isAdmin()))
                                 <a href="{{ route('follow-ups.edit', $followUp) }}" class="btn btn-sm btn-outline-primary"><i class="bi bi-pencil me-1"></i>Edit</a>
+                                @endif
+                                @if(auth()->user()->hasRole(['admin', 'sales']))
                                 <form action="{{ route('follow-ups.destroy', $followUp) }}" method="POST" class="d-inline" onsubmit="return confirm('Are you sure? This action cannot be undone.');">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="btn btn-sm btn-outline-danger"><i class="bi bi-trash me-1"></i>Delete</button>
                                 </form>
+                                @endif
                             </div>
                         </td>
                     </tr>

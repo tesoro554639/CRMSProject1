@@ -8,7 +8,15 @@ class LeadLostFormRequest extends FormRequest
 {
     public function authorize(): bool
     {
-        return true;
+        // Sales staff can only mark their own assigned leads as lost
+        if (auth()->user()->isSales()) {
+            $lead = $this->route('lead');
+
+            return $lead && $lead->assigned_user_id === auth()->id();
+        }
+
+        // Admin and manager can mark any lead as lost
+        return auth()->user()->isAdmin() || auth()->user()->isManager();
     }
 
     public function rules(): array
