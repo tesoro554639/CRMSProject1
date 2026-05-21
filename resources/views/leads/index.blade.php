@@ -95,8 +95,10 @@
                         <td class="text-end">
                             <div class="btn-group btn-group-sm" role="group">
                                 <a href="{{ route('leads.show', $lead) }}" class="btn btn-outline-primary" title="View"><i class="bi bi-eye me-1"></i>View</a>
-                                @if(auth()->user()->isAdmin())
+                                @if(auth()->user()->hasRole(['admin', 'sales']))
                                 <a href="{{ route('leads.edit', $lead) }}" class="btn btn-outline-secondary" title="Edit"><i class="bi bi-pencil me-1"></i>Edit</a>
+                                @endif
+                                @if(auth()->user()->isAdmin())
                                 <form action="{{ route('leads.destroy', $lead) }}" method="POST" style="display:inline;" onsubmit="return confirm('Are you sure? This action cannot be undone.');">
                                     @csrf
                                     @method('DELETE')

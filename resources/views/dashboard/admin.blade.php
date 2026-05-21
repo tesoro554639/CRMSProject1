@@ -119,7 +119,7 @@
                 @forelse($upcomingFollowUps as $followUp)
                 <div class="px-4 py-3 border-bottom last:border-0">
                     <div class="fw-semibold">{{ $followUp->title }}</div>
-                    <small class="text-muted">{{ $followUp->due_date->format('M d, Y') }} · {{ $followUp->user->name }}</small>
+                    <small class="text-muted">{{ $followUp->due_date->format('M d, Y') }} · {{ $followUp->user?->name ?? 'Deleted User' }}</small>
                     @if($followUp->lead)<br><small class="text-primary">{{ $followUp->lead->name }}</small>@endif
                 </div>
                 @empty
@@ -137,7 +137,7 @@
                     <div class="d-flex justify-content-between align-items-start gap-2">
                         <div>
                             <span class="status-badge status-{{ $activity->activity_type }} me-1">{{ ucfirst($activity->activity_type) }}</span>
-                            <span class="small text-muted">{{ $activity->user->name }}</span>
+                            <span class="small text-muted">{{ $activity->user?->name ?? 'Deleted User' }}</span>
                             @if($activity->lead)<small class="text-primary"> · {{ $activity->lead->name }}</small>
                             @elseif($activity->customer)<small class="text-success"> · {{ $activity->customer->first_name }}</small>@endif
                         </div>

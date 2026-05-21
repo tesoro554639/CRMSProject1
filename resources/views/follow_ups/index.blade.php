@@ -103,7 +103,7 @@
                         <td><span class="status-badge status-{{ $followUp->status }}">{{ ucfirst($followUp->status) }}</span></td>
                         <td>{{ $followUp->customer?->first_name ?? '-' }}</td>
                         <td>{{ $followUp->lead?->name ?? '-' }}</td>
-                        <td>{{ $followUp->user->name }}</td>
+                        <td>{{ $followUp->user?->name ?? 'Deleted User' }}</td>
                         <td class="text-end">
                             <div class="d-flex gap-1 justify-content-end flex-wrap">
                                 @if($followUp->isPending() && auth()->user()->hasRole(['admin', 'sales']))

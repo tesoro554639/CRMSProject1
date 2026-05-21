@@ -61,7 +61,7 @@
                 <div class="d-flex flex-wrap justify-content-between align-items-start gap-1">
                     <div>
                         <span class="status-badge status-{{ $activity->activity_type }} me-1">{{ ucfirst($activity->activity_type) }}</span>
-                        <span class="fw-semibold">{{ $activity->user->name }}</span>
+                        <span class="fw-semibold">{{ $activity->user?->name ?? 'Deleted User' }}</span>
                         @if($activity->lead)<span class="text-primary small"> · Lead: {{ $activity->lead->name }}</span>
                         @elseif($activity->customer)<span class="text-success small"> · Customer: {{ $activity->customer->first_name }} {{ $activity->customer->last_name }}</span>@endif
                     </div>
