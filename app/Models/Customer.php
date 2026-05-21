@@ -46,7 +46,7 @@ class Customer extends Model
 
     public function leads(): HasMany
     {
-        return $this->hasMany(Lead::class);
+        return $this->hasMany(Lead::class, 'converted_to_customer_id');
     }
 
     public function convertedLead(): HasOne

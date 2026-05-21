@@ -13,7 +13,6 @@ class Lead extends Model
     use HasFactory, SoftDeletes;
 
     protected $fillable = [
-        'customer_id',
         'lead_id',
         'name',
         'email',
@@ -79,10 +78,10 @@ class Lead extends Model
         return $this->belongsTo(User::class, 'assigned_user_id');
     }
 
-    public function customer(): BelongsTo
-    {
-        return $this->belongsTo(Customer::class, 'customer_id');
-    }
+    // public function customer(): BelongsTo
+    // {
+    //     return $this->belongsTo(Customer::class, 'customer_id');
+    // }
 
     public function convertedToCustomer(): BelongsTo
     {
