@@ -14,6 +14,14 @@ Route::get('/', function () {
     return redirect()->route('login');
 });
 
+// Handle logout via GET (for bookmarked/direct access)
+Route::get('/logout', function () {
+    auth()->logout();
+    session()->invalidate();
+    session()->regenerateToken();
+    return redirect()->route('login')->with('success', 'You have been logged out successfully.');
+})->middleware('auth');
+
 Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
