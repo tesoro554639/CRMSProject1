@@ -90,7 +90,17 @@
                         <td>{{ $lead->assignedUser?->name ?? '-' }}</td>
                         <td>{{ $lead->source ?? '-' }}</td>
                         <td>{{ $lead->created_at->format('M d, Y') }}</td>
-                        <td class="text-end"><a href="{{ route('leads.show', $lead) }}" class="btn btn-sm btn-outline-primary">View</a></td>
+                        <td class="text-end">
+                            <div class="btn-group btn-group-sm" role="group">
+                                <a href="{{ route('leads.show', $lead) }}" class="btn btn-outline-primary" title="View"><i class="bi bi-eye"></i></a>
+                                <a href="{{ route('leads.edit', $lead) }}" class="btn btn-outline-secondary" title="Edit"><i class="bi bi-pencil"></i></a>
+                                <form action="{{ route('leads.destroy', $lead) }}" method="POST" style="display:inline;" onsubmit="return confirm('Are you sure? This action cannot be undone.');">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-outline-danger" title="Delete"><i class="bi bi-trash"></i></button>
+                                </form>
+                            </div>
+                        </td>
                     </tr>
                     @empty
                     <tr><td colspan="11" class="text-center py-4 text-muted">No leads found</td></tr>

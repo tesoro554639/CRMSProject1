@@ -15,9 +15,10 @@
                 <h5 class="mb-0">Customer Information</h5>
                 <div class="d-flex gap-2">
                     <a href="{{ route('customers.edit', $customer) }}" class="btn btn-sm btn-outline-primary">Edit</a>
-                    <form method="POST" action="{{ route('customers.destroy', $customer) }}" class="d-inline">
-                        @csrf @method('DELETE')
-                        <button type="submit" class="btn btn-sm btn-outline-danger" onclick="return confirm('Are you sure?')">Delete</button>
+                    <form method="POST" action="{{ route('customers.destroy', $customer) }}" class="d-inline" onsubmit="return confirm('Are you sure? This action cannot be undone.');">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
                     </form>
                 </div>
             </div>

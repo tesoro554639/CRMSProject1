@@ -128,7 +128,17 @@
                         <td><span class="status-badge status-{{ $customer->status }}">{{ ucfirst($customer->status) }}</span></td>
                         <td><span class="status-badge status-{{ $customer->assignment_status }}">{{ ucfirst($customer->assignment_status) }}</span></td>
                         <td>{{ $customer->assignedUser?->name ?? '-' }}</td>
-                        <td class="text-end"><a href="{{ route('customers.show', $customer) }}" class="btn btn-sm btn-outline-primary">View</a></td>
+                        <td class="text-end">
+                            <div class="btn-group btn-group-sm" role="group">
+                                <a href="{{ route('customers.show', $customer) }}" class="btn btn-outline-primary" title="View"><i class="bi bi-eye"></i></a>
+                                <a href="{{ route('customers.edit', $customer) }}" class="btn btn-outline-secondary" title="Edit"><i class="bi bi-pencil"></i></a>
+                                <form action="{{ route('customers.destroy', $customer) }}" method="POST" style="display:inline;" onsubmit="return confirm('Are you sure? This action cannot be undone.');">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-outline-danger" title="Delete"><i class="bi bi-trash"></i></button>
+                                </form>
+                            </div>
+                        </td>
                     </tr>
                     @empty
                     <tr><td colspan="10" class="text-center py-4 text-muted">No customers found</td></tr>

@@ -28,6 +28,11 @@
                     <a href="{{ route('leads.lost-form', $lead) }}" class="btn btn-sm btn-outline-danger">Mark as Lost</a>
                     @endif
                     <a href="{{ route('leads.edit', $lead) }}" class="btn btn-sm btn-outline-primary">Edit</a>
+                    <form method="POST" action="{{ route('leads.destroy', $lead) }}" class="d-inline" onsubmit="return confirm('Are you sure? This action cannot be undone.');">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
+                    </form>
                 </div>
             </div>
             <div class="card-body">

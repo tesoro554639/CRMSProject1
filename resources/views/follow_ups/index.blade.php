@@ -103,13 +103,18 @@
                         <td>{{ $followUp->lead?->name ?? '-' }}</td>
                         <td>{{ $followUp->user->name }}</td>
                         <td class="text-end">
-                            <div class="d-flex gap-1 justify-content-end">
+                            <div class="d-flex gap-1 justify-content-end flex-wrap">
                                 @if($followUp->isPending())
                                 <form method="POST" action="{{ route('follow-ups.complete', $followUp) }}" class="d-inline">@csrf<button type="submit" class="btn btn-sm btn-outline-success">Complete</button></form>
                                 @elseif(auth()->user()->isAdmin())
                                 <form method="POST" action="{{ route('follow-ups.reopen', $followUp) }}" class="d-inline">@csrf<button type="submit" class="btn btn-sm btn-outline-warning">Reopen</button></form>
                                 @endif
-                                <a href="{{ route('follow-ups.edit', $followUp) }}" class="btn btn-sm btn-outline-primary">Edit</a>
+                                <a href="{{ route('follow-ups.edit', $followUp) }}" class="btn btn-sm btn-outline-primary"><i class="bi bi-pencil"></i></a>
+                                <form action="{{ route('follow-ups.destroy', $followUp) }}" method="POST" class="d-inline" onsubmit="return confirm('Are you sure? This action cannot be undone.');">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></button>
+                                </form>
                             </div>
                         </td>
                     </tr>

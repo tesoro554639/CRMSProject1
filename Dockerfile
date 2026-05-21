@@ -76,8 +76,4 @@ RUN printf '#!/bin/bash\nphp artisan storage:link --force 2>/dev/null || true\ne
 
 EXPOSE 10000
 
-<<<<<<< HEAD
 CMD ["/usr/local/bin/start.sh"]
-=======
-CMD ["/usr/local/bin/start.sh"]
->>>>>>> 25b3e72d1b2105edca3c1bb44816fac0420c5860
